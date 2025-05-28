@@ -22,3 +22,5 @@ logs
 .env
 .env.*
 !.env.example
+
+Script_test_kp1_v3.html
