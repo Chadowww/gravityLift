@@ -1,24 +1,34 @@
 <template>
-  <div class="mt-8 max-w-full overflow-x-auto">
-    <h2 class="text-xl font-semibold mb-2">Représentation de la poutre</h2>
+  <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-2xl shadow-md max-w-full overflow-x-auto">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Représentation de la poutre</h2>
     <svg
         :viewBox="`0 0 ${beamW} ${svgHeight}`"
-        class="w-full h-auto bg-gray-100 border border-gray-400"
+        class="w-full h-auto bg-white rounded-lg border border-gray-300 px-8"
         preserveAspectRatio="xMidYMin meet"
     >
       <!-- Poutre principale -->
-      <rect :y="offsetY" :width="beamW" :height="beamH" fill="#cbd5e1" />
+      <rect
+          :y="offsetY"
+          :width="beamW"
+          :height="beamH"
+          fill="#cbd5e1"
+      >
+        <title>Poutre</title>
+      </rect>
 
-      <!-- Réservation -->x
+      <!-- Réservation -->
       <rect
           :x="scale(reser.posi)"
           :y="scale(beamData.haut - reser.haut) + offsetY"
           :width="scale(reser.long)"
           :height="scale(reser.haut)"
           fill="white"
-          stroke="red"
+          stroke="#ef4444"
+          stroke-width="2"
           stroke-dasharray="4"
-      />
+      >
+        <title>Réservation</title>
+      </rect>
 
       <!-- Rehausse -->
       <rect
@@ -27,13 +37,15 @@
           :width="scale(rehaus.long)"
           :height="scale(rehaus.haut)"
           fill="#94a3b8"
-      />
+      >
+        <title>Rehausse</title>
+      </rect>
 
       <!-- Centre de gravité -->
       <circle
           :cx="scale(centreGx)"
           :cy="scale(centreGy) + offsetY"
-          r="4"
+          r="5"
           fill="green"
       >
         <title>Centre de gravité</title>
@@ -43,21 +55,22 @@
       <circle
           :cx="scale(ancre1)"
           :cy="scale(beamData.haut + 5)"
-          r="3"
+          r="4"
           fill="black"
       >
         <title>Ancre 1</title>
       </circle>
 
       <circle
-          :cx="scale(beamData.long - ancre2)"
+          :cx="scale(props.beamData.long - ancre2)"
           :cy="scale(beamData.haut + 5)"
-          r="3"
+          r="4"
           fill="black"
       >
         <title>Ancre 2</title>
       </circle>
     </svg>
+    <p class="text-sm text-gray-500 mt-3">Visualisation approximative à l’échelle avec rehausse, réservation et centre de gravité.</p>
   </div>
 </template>
 

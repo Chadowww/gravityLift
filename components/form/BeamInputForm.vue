@@ -1,40 +1,54 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="space-y-6">
-    <fieldset>
-      <legend class="text-xl font-semibold mb-2">Poutre</legend>
-      <FormInputField v-model.number="poutre.long" label="Longueur (cm)" />
-      <FormInputField v-model.number="poutre.haut" label="Hauteur (cm)" />
-      <FormInputField v-model.number="poutre.epais" label="Épaisseur (cm)" />
+  <form @submit.prevent="handleSubmit" class="space-y-8 max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+
+    <fieldset class="bg-gray-50 p-5 rounded-xl shadow-sm">
+      <legend class="text-2xl font-semibold mb-4 text-gray-800">Poutre</legend>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <FormInputField v-model.number="poutre.long" label="Longueur (cm)" />
+        <FormInputField v-model.number="poutre.haut" label="Hauteur (cm)" />
+        <FormInputField v-model.number="poutre.epais" label="Épaisseur (cm)" />
+      </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="text-xl font-semibold mb-2">Réservation</legend>
-      <FormInputField v-model.number="reser.long" label="Longueur (cm)" />
-      <FormInputField v-model.number="reser.haut" label="Hauteur (cm)" />
-      <FormInputField v-model.number="reser.epais" label="Épaisseur (cm)" />
-      <FormInputField v-model.number="reser.posi" label="Position (cm)" />
+    <fieldset class="bg-gray-50 p-5 rounded-xl shadow-sm">
+      <legend class="text-2xl font-semibold mb-4 text-gray-800">Réservation</legend>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <FormInputField v-model.number="reser.long" label="Longueur (cm)" />
+        <FormInputField v-model.number="reser.haut" label="Hauteur (cm)" />
+        <FormInputField v-model.number="reser.epais" label="Épaisseur (cm)" />
+        <FormInputField v-model.number="reser.posi" label="Position (cm)" />
+      </div>
     </fieldset>
 
-    <fieldset>
-      <legend class="text-xl font-semibold mb-2">Rehausse</legend>
-      <FormInputField v-model.number="rehaus.long" label="Longueur (cm)" />
-      <FormInputField v-model.number="rehaus.haut" label="Hauteur (cm)" />
-      <FormInputField v-model.number="rehaus.epais" label="Épaisseur (cm)" />
-      <FormInputField v-model.number="rehaus.posi" label="Position (cm)" />
+    <fieldset class="bg-gray-50 p-5 rounded-xl shadow-sm">
+      <legend class="text-2xl font-semibold mb-4 text-gray-800">Rehausse</legend>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <FormInputField v-model.number="rehaus.long" label="Longueur (cm)" />
+        <FormInputField v-model.number="rehaus.haut" label="Hauteur (cm)" />
+        <FormInputField v-model.number="rehaus.epais" label="Épaisseur (cm)" />
+        <FormInputField v-model.number="rehaus.posi" label="Position (cm)" />
+      </div>
     </fieldset>
 
-    <div class="mt-6">
-      <button type="submit" class="btn-primary">Calculer</button>
+    <div class="text-center">
+      <button
+          type="submit"
+          class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl shadow hover:bg-blue-700 transition"
+      >
+        🚀 Calculer
+      </button>
     </div>
 
-    <div v-if="result">
-      <h3 class="font-bold mt-6">Résultats</h3>
-      <p>Volume total : {{ result.volumeTotal.toFixed(2) }} m³</p>
-      <p>Centre de gravité X : {{ result.centreGx.toFixed(2) }} cm</p>
-      <p>Centre de gravité Y : {{ result.centreGy.toFixed(2) }} cm</p>
+    <div v-if="result" class="mt-8 bg-green-50 p-6 rounded-xl border border-green-200">
+      <h3 class="text-xl font-bold mb-2 text-green-800">✅ Résultats</h3>
+      <p class="text-green-900">Volume total : {{ result.volumeTotal.toFixed(2) }} m³</p>
+      <p class="text-green-900">Centre de gravité X : {{ result.centreGx.toFixed(2) }} cm</p>
+      <p class="text-green-900">Centre de gravité Y : {{ result.centreGy.toFixed(2) }} cm</p>
     </div>
+
   </form>
 </template>
+
 
 <script setup lang="ts">
 import { ref } from 'vue'

@@ -14,7 +14,7 @@ const ancre2 = ref(0)
 
 watch([formResult, ancre1], ([form, a1]) => {
   if (!form) return
-  ancre2.value = 2 * form.centreGx - form.poutreLong + a1
+  ancre2.value = formResult.value.centreGx - (formResult.value.poutreLong - a1 - formResult.value.centreGx)
 })
 
 function handleFormSubmit(data: any) {
