@@ -18,10 +18,10 @@
 
       <!-- Réservation -->
       <rect
-          :x="scale(reser.posi)"
-          :y="scale(beamData.haut - reser.haut) + offsetY"
-          :width="scale(reser.long)"
-          :height="scale(reser.haut)"
+          :x="scale(props.beamData.reser.posi)"
+          :y="scale(props.beamData.poutre.haut - props.beamData.reser.haut) + offsetY"
+          :width="scale(props.beamData.reser.long)"
+          :height="scale(props.beamData.reser.haut)"
           fill="white"
           stroke="#ef4444"
           stroke-width="2"
@@ -32,10 +32,10 @@
 
       <!-- Rehausse -->
       <rect
-          :x="scale(rehaus.posi)"
-          :y="offsetY - scale(rehaus.haut)"
-          :width="scale(rehaus.long)"
-          :height="scale(rehaus.haut)"
+          :x="scale(props.beamData.rehaus.posi)"
+          :y="offsetY - scale(props.beamData.rehaus.haut)"
+          :width="scale(props.beamData.rehaus.long)"
+          :height="scale(props.beamData.rehaus.haut)"
           fill="#94a3b8"
       >
         <title>Rehausse</title>
@@ -43,8 +43,8 @@
 
       <!-- Centre de gravité -->
       <circle
-          :cx="scale(centreGx)"
-          :cy="scale(centreGy) + offsetY"
+          :cx="scale(props.beamData.centreGx)"
+          :cy="scale(props.beamData.centreGy) + offsetY"
           r="5"
           fill="green"
       >
@@ -53,8 +53,8 @@
 
       <!-- Ancres -->
       <circle
-          :cx="scale(ancre1)"
-          :cy="scale(beamData.haut + 5)"
+          :cx="scale(props.beamData.ancre1)"
+          :cy="scale(props.beamData.poutre.haut + 5)"
           r="4"
           fill="black"
       >
@@ -62,8 +62,8 @@
       </circle>
 
       <circle
-          :cx="scale(props.beamData.long - ancre2)"
-          :cy="scale(beamData.haut + 5)"
+          :cx="scale(props.beamData.poutre.long - props.beamData.ancre2)"
+          :cy="scale(props.beamData.poutre.haut + 5)"
           r="4"
           fill="black"
       >
@@ -75,26 +75,46 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  beamData: { long: number; haut: number }
-  reser: { long: number; haut: number; posi: number }
-  rehaus: { long: number; haut: number; posi: number }
+// Define the beam data type
+interface BeamData {
+  poutre: {
+    long: number
+    haut: number
+    epais: number
+  }
+  reser: { 
+    long: number
+    haut: number
+    epais: number
+    posi: number 
+  }
+  rehaus: { 
+    long: number
+    haut: number
+    epais: number
+    posi: number 
+  }
   centreGx: number
   centreGy: number
+  volumeTotal: number
   ancre1: number
   ancre2: number
+}
+
+const props = defineProps<{
+  beamData: BeamData
 }>()
 
 // Définir une largeur maximum (en pixels) pour le rendu
 const maxSvgWidth = 1000
-const scaleFactor = maxSvgWidth / props.beamData.long
+const scaleFactor = maxSvgWidth / props.beamData.poutre.long
 
 // Échelle dynamique
 const scale = (val: number) => val * scaleFactor
 
-const beamW = scale(props.beamData.long)
-const beamH = scale(props.beamData.haut)
-const marginTop = scale(props.rehaus.haut) + 20
+const beamW = scale(props.beamData.poutre.long)
+const beamH = scale(props.beamData.poutre.haut)
+const marginTop = scale(props.beamData.rehaus.haut) + 20
 const marginBottom = 40
 const svgHeight = beamH + marginTop + marginBottom
 const offsetY = marginTop

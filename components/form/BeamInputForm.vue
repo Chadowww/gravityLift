@@ -106,6 +106,7 @@ function handleSubmit() {
     centreGy,
     poutreLong: poutre.value.long,
     poutreHaut: poutre.value.haut,
+    epais: poutre.value.epais,
     reser: reser.value,
     rehaus: rehaus.value,
   })

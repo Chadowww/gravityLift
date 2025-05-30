@@ -1,31 +1,82 @@
 <script setup lang="ts">
-const formResult = ref<null | {
+import { ref, watch } from 'vue'
+
+// Define interface for form submission data
+interface FormSubmitData {
+  poutreLong: number
+  poutreHaut: number
+  epais: number
+  reser: {
+    long: number
+    haut: number
+    epais: number
+    posi: number
+  }
+  rehaus: {
+    long: number
+    haut: number
+    epais: number
+    posi: number
+  }
   centreGx: number
   centreGy: number
   volumeTotal: number
-  poutreLong: number
-  poutreHaut: number
-  reser: { long: number; haut: number; posi: number }
-  rehaus: { long: number; haut: number; posi: number }
+}
+
+// Unified beam data structure
+const beamData = ref<null | {
+  // Beam dimensions
+  poutre: {
+    long: number
+    haut: number
+    epais: number
+  }
+  // Reservation
+  reser: {
+    long: number
+    haut: number
+    epais: number
+    posi: number
+  }
+  // Rehausse
+  rehaus: {
+    long: number
+    haut: number
+    epais: number
+    posi: number
+  }
+  // Calculated values
+  centreGx: number
+  centreGy: number
+  volumeTotal: number
+  // Anchor positions
+  ancre1: number
+  ancre2: number
 }>(null)
 
-const ancre1 = ref(0)
-const ancre2 = ref(0)
+watch(() => beamData.value?.ancre1, (newAncre1) => {
+  if (!beamData.value || newAncre1 === undefined) return
+  beamData.value.ancre2 = beamData.value.centreGx - (beamData.value.poutre.long - newAncre1 - beamData.value.centreGx)
+}, { immediate: true })
 
-watch([formResult, ancre1], ([form, a1]) => {
-  if (!form) return
-  ancre2.value = formResult.value.centreGx - (formResult.value.poutreLong - a1 - formResult.value.centreGx)
-})
-
-function handleFormSubmit(data: any) {
-  formResult.value = {
+function handleFormSubmit(data: FormSubmitData) {
+  beamData.value = {
+    poutre: {
+      long: data.poutreLong,
+      haut: data.poutreHaut,
+      epais: data.epais
+    },
+    reser: data.reser,
+    rehaus: data.rehaus,
     centreGx: data.centreGx,
     centreGy: data.centreGy,
     volumeTotal: data.volumeTotal,
-    poutreLong: data.poutreLong,
-    poutreHaut: data.poutreHaut,
-    reser: data.reser,
-    rehaus: data.rehaus,
+    ancre1: 0,
+    ancre2: 0
+  }
+
+  if (beamData.value) {
+    beamData.value.ancre2 = beamData.value.centreGx - (beamData.value.poutre.long - beamData.value.ancre1 - beamData.value.centreGx)
   }
 }
 </script>
@@ -37,21 +88,19 @@ function handleFormSubmit(data: any) {
     <FormBeamInputForm @submit="handleFormSubmit" />
 
     <FormAnchorCalculation
-        v-if="formResult"
-        v-model="ancre1"
-        :centreGx="formResult.centreGx"
-        :poutreLong="formResult.poutreLong"
+        v-if="beamData"
+        v-model="beamData.ancre1"
+        :beamData="beamData"
+    />
+
+    <VisualsBeamScene
+        v-if="beamData"
+        :beamData="beamData"
     />
 
     <VisualsBeamVisualizer
-        v-if="formResult"
-        :beamData="{ long: formResult.poutreLong, haut: formResult.poutreHaut }"
-        :reser="formResult.reser"
-        :rehaus="formResult.rehaus"
-        :centreGx="formResult.centreGx"
-        :centreGy="formResult.centreGy"
-        :ancre1="ancre1"
-        :ancre2="ancre2"
+        v-if="beamData"
+        :beamData="beamData"
     />
   </div>
 </template>

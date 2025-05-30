@@ -13,9 +13,9 @@
       />
     </div>
 
-    <div v-if="centreGx !== null" class="mt-8 bg-green-50 p-6 rounded-xl border border-green-200">
+    <div class="mt-8 bg-green-50 p-6 rounded-xl border border-green-200">
       <h3 class="text-xl font-bold mb-2 text-green-800">✅ Résultats</h3>
-      <p  v-if="ancre2 !== null" class="text-green-900">➤ Position de l’ancre 2 : <strong>{{ ancre2.toFixed(2) }} cm</strong></p>
+      <p class="text-green-900">➤ Position de l'ancre 2 : <strong>{{ ancre2.toFixed(2) }} cm</strong></p>
     </div>
   </div>
 </template>
@@ -23,10 +23,35 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+// Define the beam data type
+interface BeamData {
+  poutre: {
+    long: number
+    haut: number
+    epais: number
+  }
+  reser: { 
+    long: number
+    haut: number
+    epais: number
+    posi: number 
+  }
+  rehaus: { 
+    long: number
+    haut: number
+    epais: number
+    posi: number 
+  }
+  centreGx: number
+  centreGy: number
+  volumeTotal: number
+  ancre1: number
+  ancre2: number
+}
+
 const props = defineProps<{
   modelValue: number
-  centreGx: number | null
-  poutreLong: number
+  beamData: BeamData
 }>()
 const emit = defineEmits(['update:modelValue'])
 
@@ -37,8 +62,7 @@ watchEffect(() => {
 watch(ancre1, (val) => emit('update:modelValue', val))
 
 const ancre2 = computed(() => {
-  if (props.centreGx === null) return null
-  return 2 * props.centreGx - ancre1.value
+  return props.beamData.ancre2
 })
 </script>
 
